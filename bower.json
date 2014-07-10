@@ -1,0 +1,10 @@
+{
+  "name": "init-tester",
+  "version": "1.0.0",
+  "authors": [
+    "Jordan Kicklighter <jordan@shiftagent.org>"
+  ],
+  "description": "Initialization Test Runner",
+  "main": "init-tester.js",
+  "private": false
+}
