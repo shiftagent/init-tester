@@ -103,7 +103,7 @@ var InitTester = function(userAgent, onPass, onFail) {
     // Call all pass or fail functions
     if (failureMessages.length === 0) {
       for (passFn in this.passFns) {
-        passFns[passFn]();
+        this.passFns[passFn]();
       }
     } else {
       for (failFn in this.failFns) {
