@@ -4,6 +4,7 @@
   "authors": [
     "Jordan Kicklighter <jordan@shiftagent.org>"
   ],
+  "ignore": [],
   "description": "Initialization Test Runner",
   "main": "init-tester.js",
   "private": false
