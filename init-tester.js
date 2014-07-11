@@ -88,19 +88,49 @@ var InitTester = function(userAgent, onPass, onFail) {
     // Collect messages with relevant tags for failing init tests
     for (i in this.initTests) {
       var messages = this.initTests[i].messages;
-      for (j in messages) {
-        var msg = messages[j];
-        for (k in msg.tags) {
-          var tag = msg.tags[k];
-          if (contains(this.currentDeviceTags, tag)) {
-            if (!this.initTests[i].pass) {
-              failureMessages.push(msg);
-            }
-          } else if (contains(this.currentDeviceTags, this.defaultTagName)) {
+      var msgFound = false;
 
+      // If the test did not pass
+      if (!this.initTests[i].pass) {
+
+        // Loop over messages
+        for (j in messages) {
+        var msg = messages[j];
+
+          // Loop over the message's tags
+          for (k in msg.tags) {
+            var tag = msg.tags[k];
+
+            // If this tag is in currentDeviceTags, save it for later
+            if (contains(this.currentDeviceTags, tag)) {
+              failureMessages.push(msg);
+              msgFound = true;
+            }
           }
         }
+
+        // If messages with matching tags were found
+        if (!msgFound) {
+
+          // Loop over messages
+          for (j in messages) {
+            var msg = messages[j];
+
+            // Loop over the message's tags
+            for (k in msg.tags) {
+              var tag = msg.tags[k];
+
+              // If this tag is the defaultTagName, save it for later
+              if (tag === this.defaultTagName) {
+                failureMessages.push(msg);
+                msgFound = true;
+              }
+            }
+          }
+        }
+
       }
+
     }
 
     // Call all pass or fail functions
