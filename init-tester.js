@@ -10,6 +10,7 @@ var InitTester = function(userAgent, onPass, onFail) {
   this.passFns = [onPass];
   this.failFns = [onFail];
   this.userAgent = userAgent;
+  this.defaultTagName = 'default';
 
   var addInitTest = function(initTestName, initTest) {
     this.initTests[initTestName] = initTest;
@@ -95,6 +96,8 @@ var InitTester = function(userAgent, onPass, onFail) {
             if (!this.initTests[i].pass) {
               failureMessages.push(msg);
             }
+          } else if (contains(this.currentDeviceTags, this.defaultTagName)) {
+
           }
         }
       }
