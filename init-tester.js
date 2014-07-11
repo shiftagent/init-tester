@@ -92,7 +92,7 @@ var InitTester = function(userAgent, onPass, onFail) {
         var msg = messages[j];
         for (k in msg.tags) {
           var tag = msg.tags[k];
-          if (_.contains(this.currentDeviceTags, tag)) {
+          if (contains(this.currentDeviceTags, tag)) {
             if (!this.initTests[i].pass) {
               failureMessages.push(msg);
             }
@@ -115,6 +115,23 @@ var InitTester = function(userAgent, onPass, onFail) {
     }
 
     return this;
+  };
+
+  var contains = function(collection, values) {
+
+    // If 'values' is not an array, make it an array
+    if (values.constructor !== Array) {
+      values = [values];
+    }
+    for (valId in values) {
+      var val = values[valId];
+      for (colId in collection) {
+        if (collection[colId] === val) {
+          return true;
+        }
+      }
+    }
+    return false;
   };
 
   InitTester.prototype.addInitTest = addInitTest;
