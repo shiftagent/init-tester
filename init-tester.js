@@ -10,6 +10,7 @@ var InitTester = function(userAgent, onPass, onFail) {
   this.passFns = [onPass];
   this.failFns = [onFail];
   this.userAgent = userAgent;
+  this.defaultTagName = 'default';
 
   var addInitTest = function(initTestName, initTest) {
     this.initTests[initTestName] = initTest;
@@ -70,7 +71,7 @@ var InitTester = function(userAgent, onPass, onFail) {
     };
 
     // Run all init tests
-    _.each(this.initTests, function(testObj, testName) {
+    each(this.initTests, function(testObj, testName) {
       if (!testObj.initTest()) {
         testObj.pass = false;
         if (testObj.onFail) {
@@ -87,17 +88,49 @@ var InitTester = function(userAgent, onPass, onFail) {
     // Collect messages with relevant tags for failing init tests
     for (i in this.initTests) {
       var messages = this.initTests[i].messages;
-      for (j in messages) {
+      var msgFound = false;
+
+      // If the test did not pass
+      if (!this.initTests[i].pass) {
+
+        // Loop over messages
+        for (j in messages) {
         var msg = messages[j];
-        for (k in msg.tags) {
-          var tag = msg.tags[k];
-          if (_.contains(this.currentDeviceTags, tag)) {
-            if (!this.initTests[i].pass) {
+
+          // Loop over the message's tags
+          for (k in msg.tags) {
+            var tag = msg.tags[k];
+
+            // If this tag is in currentDeviceTags, save it for later
+            if (contains(this.currentDeviceTags, tag)) {
               failureMessages.push(msg);
+              msgFound = true;
             }
           }
         }
+
+        // If messages with matching tags were found
+        if (!msgFound) {
+
+          // Loop over messages
+          for (j in messages) {
+            var msg = messages[j];
+
+            // Loop over the message's tags
+            for (k in msg.tags) {
+              var tag = msg.tags[k];
+
+              // If this tag is the defaultTagName, save it for later
+              if (tag === this.defaultTagName) {
+                failureMessages.push(msg);
+                msgFound = true;
+              }
+            }
+          }
+        }
+
       }
+
     }
 
     // Call all pass or fail functions
@@ -114,23 +147,47 @@ var InitTester = function(userAgent, onPass, onFail) {
     return this;
   };
 
+  var contains = function(containsCollection, values) {
+
+    // If 'values' is not an array, make it an array
+    if (values.constructor !== Array) {
+      values = [values];
+    }
+    for (valId in values) {
+      var val = values[valId];
+      for (colId in containsCollection) {
+        if (containsCollection[colId] === val) {
+          return true;
+        }
+      }
+    }
+    return false;
+  };
+
+  var each = function(eachCollection, eachFn) {
+    for (elem in eachCollection) {
+      eachFn(eachCollection[elem], elem);
+    }
+  };
+
   InitTester.prototype.addInitTest = addInitTest;
   InitTester.prototype.onPass = setOnPass;
   InitTester.prototype.onFail = setOnFail;
   InitTester.prototype.addTagDefinition = addTagDefinition;
   InitTester.prototype.addPassFn = addPassFn;
+  InitTester.prototype.addFailFn = addFailFn;
   InitTester.prototype.run = run;
 
   return this;
 };
 
-var Message = function(data) {
-  if (data.tags.constructor === String) {
-    this.tags = [data.tags]
+var InitTestMessage = function(data) {
+  if (data.tags.constructor !== Array) {
+    this.tags = [data.tags];
   } else {
     this.tags = data.tags;
   }
-  if (data.tags.constructor === String) {
+  if (data.steps.constructor !== Array) {
     this.steps = [data.steps];
   } else {
     this.steps = data.steps;

@@ -1,0 +1,120 @@
+<html>
+<head>
+
+  <!-- These are not required to use init-tester -->
+  <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js"></script>
+
+  <!-- Please point to your local copy! -->
+  <script src="http://rawgit.com/shiftagent/init-tester/master/init-tester.js"></script>
+
+  <style>
+  
+  #msg {
+    background-color: #555;
+    font-family: sans-serif;
+    width: 400px;
+  }
+
+  .error {
+  }
+
+  .error_title {
+    background-color: #222;
+    color: #ddd;
+    padding: 10px;
+    text-align: center;
+  }
+
+  .error_desc {
+    padding: 10px;
+  }
+
+  .error_steps {
+    padding: 0 10px 10px;
+  }
+
+  </style>
+
+</head>
+
+<body>
+
+  <div id="msg"></div>
+
+
+  <script type="text/javascript">
+
+  var myFailFn = function(failureMessages) {
+
+    _.each(failureMessages, function(msg) {
+      var title = msg.title;
+      var desc = msg.desc;
+
+      var steps = '';
+
+      for (i = 0; i< msg.steps.length; i++) {
+        steps += '<li>';
+        steps += msg.steps[i];
+        steps += '</li>';
+      }
+
+      steps = '<ol>' + steps + '</ol>';
+
+      $('#msg').append(
+              '<div class="error">' +
+              '<div class="error_title">$title</div>'.replace('$title', title) +
+              '<div class="error_desc">$desc</div>'.replace('$desc', desc) +
+              '<div class="error_steps">$steps</div>'.replace('$steps', steps) +
+              '</div>'
+      );
+    });
+  };
+
+
+  new InitTester(window.navigator.userAgent)
+      .addTagDefinition('android', /Android/i)
+      .addTagDefinition('chrome', /(Chromium|Chrome)\/(\d+)\.(\d+)\.(\d+)/i)
+      .addInitTest('autoFail', new InitTest({
+        testFn: function() {
+          return false; // Fail on purpose!
+        },
+        messages: [
+          new InitTestMessage({
+            tags: ['android'],
+            title: 'Android Message',
+            desc: 'The init test has failed, and you have an Android device.',
+            steps: [
+              'Go to a computer',
+              'Install Bower',
+              'Run `bower install --save init-tester`',
+              'Profit!'
+            ]
+          }),
+          new InitTestMessage({
+            tags: ['chrome'],
+            title: 'Chrome Message',
+            desc: 'The init test has failed, and you have a Chrome browser.',
+            steps: [
+              'Install Bower',
+              'Run `bower install --save init-tester`',
+              'Profit!'
+            ]
+          }),
+          new InitTestMessage({
+            tags: ['default'],
+            title: 'Default Message',
+            desc: 'The init test has failed, and you have an unchecked device.',
+            steps: [
+              'I can\'t really help you...',
+              'Sorry about that!'
+            ]
+          })
+        ]
+      }))
+      .onFail(myFailFn)
+      .run();
+
+  </script>
+</body>
+</html>
