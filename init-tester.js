@@ -157,7 +157,7 @@ var InitTestMessage = function(data) {
   } else {
     this.tags = data.tags;
   }
-  if (data.tags.constructor !== Array) {
+  if (data.steps.constructor !== Array) {
     this.steps = [data.steps];
   } else {
     this.steps = data.steps;
