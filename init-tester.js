@@ -71,7 +71,7 @@ var InitTester = function(userAgent, onPass, onFail) {
     };
 
     // Run all init tests
-    _.each(this.initTests, function(testObj, testName) {
+    each(this.initTests, function(testObj, testName) {
       if (!testObj.initTest()) {
         testObj.pass = false;
         if (testObj.onFail) {
@@ -117,7 +117,7 @@ var InitTester = function(userAgent, onPass, onFail) {
     return this;
   };
 
-  var contains = function(collection, values) {
+  var contains = function(containsCollection, values) {
 
     // If 'values' is not an array, make it an array
     if (values.constructor !== Array) {
@@ -125,13 +125,19 @@ var InitTester = function(userAgent, onPass, onFail) {
     }
     for (valId in values) {
       var val = values[valId];
-      for (colId in collection) {
-        if (collection[colId] === val) {
+      for (colId in containsCollection) {
+        if (containsCollection[colId] === val) {
           return true;
         }
       }
     }
     return false;
+  };
+
+  var each = function(eachCollection, eachFn) {
+    for (elem in eachCollection) {
+      eachFn(eachCollection[elem], elem);
+    }
   };
 
   InitTester.prototype.addInitTest = addInitTest;
