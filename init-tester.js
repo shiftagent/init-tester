@@ -122,6 +122,7 @@ var InitTester = function(userAgent, onPass, onFail) {
   InitTester.prototype.onFail = setOnFail;
   InitTester.prototype.addTagDefinition = addTagDefinition;
   InitTester.prototype.addPassFn = addPassFn;
+  InitTester.prototype.addFailFn = addFailFn;
   InitTester.prototype.run = run;
 
   return this;
