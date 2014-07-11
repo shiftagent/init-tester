@@ -128,13 +128,13 @@ var InitTester = function(userAgent, onPass, onFail) {
   return this;
 };
 
-var Message = function(data) {
-  if (data.tags.constructor === String) {
-    this.tags = [data.tags]
+var InitTestMessage = function(data) {
+  if (data.tags.constructor !== Array) {
+    this.tags = [data.tags];
   } else {
     this.tags = data.tags;
   }
-  if (data.tags.constructor === String) {
+  if (data.tags.constructor !== Array) {
     this.steps = [data.steps];
   } else {
     this.steps = data.steps;
