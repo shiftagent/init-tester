@@ -46,6 +46,7 @@ var InitTester = function(userAgent, onPass, onFail) {
     var failureMessages = [];
 
     // Add tags based on current device configuration
+    var tag;
     for (tag in this.tagTests) {
 
       var tagTest = this.tagTests[tag];
@@ -86,6 +87,7 @@ var InitTester = function(userAgent, onPass, onFail) {
     });
 
     // Collect messages with relevant tags for failing init tests
+    var i;
     for (i in this.initTests) {
       var messages = this.initTests[i].messages;
       var msgFound = false;
@@ -94,10 +96,12 @@ var InitTester = function(userAgent, onPass, onFail) {
       if (!this.initTests[i].pass) {
 
         // Loop over messages
+        var j;
         for (j in messages) {
         var msg = messages[j];
 
           // Loop over the message's tags
+          var k;
           for (k in msg.tags) {
             var tag = msg.tags[k];
 
@@ -113,10 +117,12 @@ var InitTester = function(userAgent, onPass, onFail) {
         if (!msgFound) {
 
           // Loop over messages
+          var j;
           for (j in messages) {
             var msg = messages[j];
 
             // Loop over the message's tags
+            var k;
             for (k in msg.tags) {
               var tag = msg.tags[k];
 
@@ -135,10 +141,12 @@ var InitTester = function(userAgent, onPass, onFail) {
 
     // Call all pass or fail functions
     if (failureMessages.length === 0) {
+      var passFn;
       for (passFn in this.passFns) {
         this.passFns[passFn]();
       }
     } else {
+      var failFn;
       for (failFn in this.failFns) {
         this.failFns[failFn](failureMessages);
       }
@@ -153,6 +161,7 @@ var InitTester = function(userAgent, onPass, onFail) {
     if (values.constructor !== Array) {
       values = [values];
     }
+    var valId, colId;
     for (valId in values) {
       var val = values[valId];
       for (colId in containsCollection) {
@@ -165,6 +174,7 @@ var InitTester = function(userAgent, onPass, onFail) {
   };
 
   var each = function(eachCollection, eachFn) {
+    var elem;
     for (elem in eachCollection) {
       eachFn(eachCollection[elem], elem);
     }
